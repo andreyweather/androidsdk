@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.enkod.enkodpushlibrary"
+    namespace = "com.enkod.androidsdk"
     compileSdk = 34
 
     defaultConfig {
