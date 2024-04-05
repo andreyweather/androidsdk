@@ -35,10 +35,10 @@ internal object TokenAutoUpdate {
 
             PeriodicWorkRequestBuilder<TokenAutoUpdateWorkManager>(
                 time.toLong(),
-                TimeUnit.HOURS
+                TimeUnit.MINUTES
             )
 
-                .setInitialDelay(time.toLong(),TimeUnit.HOURS)
+                .setInitialDelay(time.toLong(),TimeUnit.MINUTES)
                 .setConstraints(constraint)
                 .build()
 
@@ -109,7 +109,7 @@ internal object TokenAutoUpdate {
             preferences.getInt(Preferences.TIME_TOKEN_AUTO_UPDATE_TAG, defaultTimeAutoUpdateToken)
 
         val timeAutoUpdate =
-            (setTimeTokenUpdate ?: defaultTimeAutoUpdateToken) * millisInHours
+            (setTimeTokenUpdate ?: defaultTimeAutoUpdateToken) * 60000
 
 
         if (preferencesAcc != null) {
