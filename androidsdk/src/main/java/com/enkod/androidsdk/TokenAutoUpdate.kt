@@ -198,6 +198,7 @@ internal object TokenAutoUpdate {
 
                                 startVerificationTokenUsingWorkManager(context)
 
+
                                 logInfo("error get new token in token auto update function")
 
                             }
@@ -205,7 +206,9 @@ internal object TokenAutoUpdate {
 
                     } else {
 
+
                         startVerificationTokenUsingWorkManager(context)
+
 
                         logInfo("error deletion token in token auto update function")
 
