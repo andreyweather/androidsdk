@@ -27,13 +27,11 @@ import rx.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
 
-
 internal object TokenAutoUpdate {
 
-    val autoUpdateObserver = AutoUpdateObserver(false)
-    var update = false
+    var update = true
 
-    fun startTokenAutoUpdateUsingWorkManager (context: Context, time: Int) {
+    fun startTokenAutoUpdateUsingWorkManager(context: Context, time: Int) {
 
         logInfo("token auto update work start")
 
@@ -46,7 +44,7 @@ internal object TokenAutoUpdate {
                 time.toLong(),
                 TimeUnit.HOURS
             )
-                .setInitialDelay(time.toLong(),TimeUnit.HOURS)
+                .setInitialDelay(time.toLong(), TimeUnit.HOURS)
                 .setConstraints(constraint)
                 .build()
 
@@ -81,16 +79,16 @@ internal object TokenAutoUpdate {
                 if (isAppInforegrounded()) {
 
                     EnKodSDK.startTokenManualUpdateObserver.observable.subscribe { start ->
-                       when (start) {
-                           true -> {
-                               logInfo("auto update canceled manual update activated")
-                               return@subscribe
-                           }
-                           false -> tokenUpdate(applicationContext)
-                       }
+                        when (start) {
+                            true -> {
+                                logInfo("auto update canceled manual update activated")
+                                return@subscribe
+                            }
+
+                            false -> tokenUpdate(applicationContext)
+                        }
                     }
-                }
-                else tokenUpdate(applicationContext)
+                } else tokenUpdate(applicationContext)
             }
 
             return Result.success()
@@ -105,7 +103,7 @@ internal object TokenAutoUpdate {
         initPreferences(context)
         initRetrofit(context)
 
-        logInfo( "token auto update function")
+        logInfo("token auto update function")
 
         val preferences = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
 
@@ -125,9 +123,9 @@ internal object TokenAutoUpdate {
 
             if (timeLastTokenUpdate != null && timeLastTokenUpdate > 0) {
 
-                if ((System.currentTimeMillis() - timeLastTokenUpdate) >= timeAutoUpdate-60000) {
+                if ((System.currentTimeMillis() - timeLastTokenUpdate) >= timeAutoUpdate - 60000) {
 
-                    updateProcess (context, preferencesAcc)
+                    updateProcess(context, preferencesAcc)
 
                 } else {
 
@@ -135,85 +133,73 @@ internal object TokenAutoUpdate {
                 }
             }
         }
-
-        autoUpdateObserver.observable.subscribe { start ->
-
-            if (start == true) {
-
-                update = false
-
-                CoroutineScope(Dispatchers.IO).launch {
-
-                    delay(5000)
-
-                    logInfo("old token delete waiting for the update to complete")
-
-                    if (update == false) {
-
-                        logInfo("update reload")
-
-                        updateProcess (context, preferencesAcc ?: "")
-
-                    }
-                }
-            }
-        }
     }
 
-    fun updateProcess (context: Context, preferencesAcc: String) {
+    fun updateProcess(context: Context, preferencesAcc: String) {
 
         try {
 
-            autoUpdateObserver.value = true
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(10000)
 
-            FirebaseMessaging.getInstance().deleteToken()
+                update = false
+            }
 
-                .addOnCompleteListener { task ->
-
-                    if (task.isSuccessful) {
-
-                        logInfo( "token auto update: delete old token")
+            while (update) {
 
 
-                        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                FirebaseMessaging.getInstance().deleteToken()
 
-                            if (task.isSuccessful) {
+                    .addOnCompleteListener { task ->
 
-                                val token = task.result
+                        if (task.isSuccessful) {
 
-                                EnKodSDK.init(
-                                    context,
-                                    preferencesAcc,
-                                    token
-                                )
-
-                                startVerificationTokenUsingWorkManager(context)
-
-                                autoUpdateObserver.value = false
-                                update = true
-
-                                logInfo( "token update in auto update function")
-
-                            } else {
-
-                                startVerificationTokenUsingWorkManager(context)
+                            logInfo("token auto update: delete old token")
 
 
-                                logInfo("error get new token in token auto update function")
+                            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
 
+
+                                if (task.isSuccessful) {
+
+                                    val token = task.result
+
+                                    EnKodSDK.init(
+                                        context,
+                                        preferencesAcc,
+                                        token
+                                    )
+
+                                    update = false
+
+                                    startVerificationTokenUsingWorkManager(context)
+
+
+                                    logInfo("token update in auto update function")
+
+                                } else {
+
+                                    startVerificationTokenUsingWorkManager(context)
+
+
+                                    logInfo("error get new token in token auto update function")
+
+                                }
                             }
+
+                        } else {
+
+
+                            startVerificationTokenUsingWorkManager(context)
+
+
+                            logInfo("error deletion token in token auto update function")
+
                         }
-
-                    } else {
-
-
-                        startVerificationTokenUsingWorkManager(context)
-
-
-                        logInfo("error deletion token in token auto update function")
-
                     }
-                }
+            }
+
+
 
         } catch (e: Exception) {
 
@@ -227,11 +213,3 @@ internal object TokenAutoUpdate {
     }
 }
 
-class AutoUpdateObserver<T>(private val defaultValue: T) {
-    var value: T = defaultValue
-        set(value) {
-            field = value
-            observable.onNext(value)
-        }
-    val observable = BehaviorSubject.create<T>(value)
-}
