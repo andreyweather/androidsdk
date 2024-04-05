@@ -37,9 +37,9 @@ internal object TokenAutoUpdate {
                 time.toLong(),
                 TimeUnit.MINUTES
             )
+                //.setInitialDelay(time.toLong(),TimeUnit.MINUTES)
 
-                .setInitialDelay(time.toLong(),TimeUnit.MINUTES)
-                .setConstraints(constraint)
+                 .setConstraints(constraint)
                 .build()
 
         WorkManager
