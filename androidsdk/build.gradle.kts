@@ -62,8 +62,8 @@ dependencies {
 publishing {
     publications {
         register<MavenPublication>("release") {
-            groupId = "com.github.AndreyWeather"
-            artifactId = "EnkodPushLibrary"
+            groupId = "com.github.enkodio"
+            artifactId = "androidsdk"
             version = "1.0.0"
 
             afterEvaluate {

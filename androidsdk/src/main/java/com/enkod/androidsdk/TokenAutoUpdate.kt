@@ -68,7 +68,7 @@ internal object TokenAutoUpdate {
             val preferencesUsingFcm: Boolean? =
                 preferences.getBoolean(Preferences.USING_FCM, false)
 
-            if (preferencesUsingFcm != null && preferencesUsingFcm == true) {
+            if (preferencesUsingFcm == true) {
 
                 if (isAppInforegrounded()) {
 
@@ -114,9 +114,13 @@ internal object TokenAutoUpdate {
 
         if (preferencesAcc != null) {
 
+            logInfo( "token auto preferencesAcc != null")
+
             if (timeLastTokenUpdate != null && timeLastTokenUpdate > 0) {
 
                 if ((System.currentTimeMillis() - timeLastTokenUpdate) >= timeAutoUpdate-60000) {
+
+                    logInfo( "token auto >= timeAutoUpdate-60000")
 
                     try {
 
@@ -126,9 +130,13 @@ internal object TokenAutoUpdate {
 
                                 if (task.isSuccessful) {
 
+                                    logInfo( "token auto delete token")
+
                                     FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
 
                                         if (task.isSuccessful) {
+
+                                            logInfo( "token auto update token")
 
                                             val token = task.result
 
