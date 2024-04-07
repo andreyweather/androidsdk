@@ -23,7 +23,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import rx.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
 
@@ -150,24 +149,24 @@ internal object TokenAutoUpdate {
 
                                 delay(1500)
 
-                                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                FirebaseMessaging.getInstance().token.addOnCompleteListener { newToken ->
 
 
-                                    if (task.isSuccessful) {
+                                    if (newToken.isSuccessful) {
 
-                                        val token = task.result
+                                        val token = newToken.result
 
                                         EnKodSDK.init(
+
                                             context,
                                             preferencesAcc,
                                             token
+
                                         )
 
                                         logInfo("token update in auto update function")
 
                                         startVerificationTokenUsingWorkManager(context)
-
-
 
 
                                     } else {
