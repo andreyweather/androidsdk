@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit
 
 internal object TokenAutoUpdate {
 
-    var update = true
 
     fun startTokenAutoUpdateUsingWorkManager(context: Context, time: Int) {
 
@@ -139,15 +138,6 @@ internal object TokenAutoUpdate {
 
         try {
 
-            CoroutineScope(Dispatchers.IO).launch {
-                delay(10000)
-
-                update = false
-            }
-
-            while (update) {
-
-
                 FirebaseMessaging.getInstance().deleteToken()
 
                     .addOnCompleteListener { task ->
@@ -156,34 +146,38 @@ internal object TokenAutoUpdate {
 
                             logInfo("token auto update: delete old token")
 
+                            CoroutineScope(Dispatchers.IO).launch {
 
-                            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                delay(1500)
 
-
-                                if (task.isSuccessful) {
-
-                                    val token = task.result
-
-                                    EnKodSDK.init(
-                                        context,
-                                        preferencesAcc,
-                                        token
-                                    )
-
-                                    update = false
-
-                                    startVerificationTokenUsingWorkManager(context)
+                                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
 
 
-                                    logInfo("token update in auto update function")
+                                    if (task.isSuccessful) {
 
-                                } else {
+                                        val token = task.result
 
-                                    startVerificationTokenUsingWorkManager(context)
+                                        EnKodSDK.init(
+                                            context,
+                                            preferencesAcc,
+                                            token
+                                        )
+
+                                        logInfo("token update in auto update function")
+
+                                        startVerificationTokenUsingWorkManager(context)
 
 
-                                    logInfo("error get new token in token auto update function")
 
+
+                                    } else {
+
+                                        startVerificationTokenUsingWorkManager(context)
+
+
+                                        logInfo("error get new token in token auto update function")
+
+                                    }
                                 }
                             }
 
@@ -197,8 +191,6 @@ internal object TokenAutoUpdate {
 
                         }
                     }
-            }
-
 
 
         } catch (e: Exception) {
