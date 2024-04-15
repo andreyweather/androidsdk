@@ -417,7 +417,6 @@ object Tracking {
                 }
             }
 
-
             orderInfo.add("items", items)
 
             orderInfo.add("order", JsonObject().apply {

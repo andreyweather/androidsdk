@@ -103,6 +103,7 @@ internal fun NotificationChannel.setSound(hasSound: Boolean) {
             AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build()
         )
     }else{
+
         setSound(null, null)
     }
 }
@@ -114,6 +115,7 @@ internal fun NotificationCompat.Builder.addActions(context: Context, map: Map<St
 
 
             val intent = EnKodSDK.getIntent(
+
                 context = context,
                 data = map,
                 field = map["${actionButtonIntent}$i"] ?: "",

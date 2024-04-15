@@ -79,7 +79,9 @@ class EnkodConnect(
                     try {
 
                         FirebaseMessaging.getInstance().token.addOnCompleteListener(
+
                             OnCompleteListener { task ->
+
                                 if (!task.isSuccessful) {
 
                                     return@OnCompleteListener

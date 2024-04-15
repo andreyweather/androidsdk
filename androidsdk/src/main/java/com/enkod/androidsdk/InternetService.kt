@@ -22,7 +22,6 @@ class InternetService : Service() {
 
         logInfo("serviceCreated")
 
-
         super.onCreate()
 
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
@@ -40,7 +39,6 @@ class InternetService : Service() {
                 startAutoUpdateToken = start
             }
         }
-
 
         EnKodSDK.pushLoadObserver.observable.subscribe { completed ->
 
