@@ -22,6 +22,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 
+//класс EnkodPushMessagingService расширяет FirebaseMessagingService() необходим для получения push уведомлений через fcm.
 class EnkodPushMessagingService : FirebaseMessagingService() {
 
 
