@@ -2,16 +2,9 @@ package com.enkod.androidsdk
 
 
 import android.content.Context
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+
 import com.enkod.androidsdk.EnKodSDK.initPreferences
 import com.enkod.androidsdk.EnKodSDK.initRetrofit
-import com.enkod.androidsdk.EnKodSDK.isAppInforegrounded
 import com.enkod.androidsdk.EnKodSDK.logInfo
 import com.enkod.androidsdk.EnKodSDK.startTokenAutoUpdateObserver
 import com.enkod.androidsdk.Preferences.TAG
@@ -20,12 +13,7 @@ import com.enkod.androidsdk.Variables.millisInHours
 import com.enkod.androidsdk.VerificationOfTokenCompliance.startVerificationTokenUsingWorkManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import rx.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
+
 
 
 internal object TokenAutoUpdate {
