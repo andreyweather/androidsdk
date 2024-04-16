@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 
+// интерфейс Api содежит функции запросов для retrofit
 interface Api {
     @POST("/sessions/")
     fun getSessionId(@Header("X-Account")client:String): Call<SessionIdResponse>

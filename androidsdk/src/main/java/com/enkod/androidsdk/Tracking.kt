@@ -8,6 +8,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.UUID
 
+// объект Tracking содержит методы необходимые для передачи событий трекинга на сервер
 object Tracking {
 
     private var onProductActionCallback: (String) -> Unit = {}

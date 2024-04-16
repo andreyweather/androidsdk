@@ -158,7 +158,13 @@ class EnkodPushMessagingService : FirebaseMessagingService() {
                                         applicationContext,
                                         dataFromPush
                                     )
+
+                                    if (preferencesTokenAutoUpdate == true) {
+                                        TokenAutoUpdate.tokenUpdate(applicationContext)
+                                    }
+
                                 }
+
                                 else -> {
 
                                     this.startService(service)
@@ -167,6 +173,10 @@ class EnkodPushMessagingService : FirebaseMessagingService() {
                                         applicationContext,
                                         dataFromPush
                                     )
+
+                                    if (preferencesTokenAutoUpdate == true) {
+                                        TokenAutoUpdate.tokenUpdate(applicationContext)
+                                    }
                                 }
                             }
                         }
@@ -183,6 +193,10 @@ class EnkodPushMessagingService : FirebaseMessagingService() {
 
             } else {
                 managingTheNotificationCreationProcess(applicationContext, dataFromPush)
+
+                if (preferencesTokenAutoUpdate == true) {
+                    TokenAutoUpdate.tokenUpdate(applicationContext)
+                }
             }
 
 

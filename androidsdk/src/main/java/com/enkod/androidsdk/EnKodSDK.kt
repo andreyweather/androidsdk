@@ -79,7 +79,7 @@ import java.lang.reflect.Type
 import java.util.Random
 import java.util.concurrent.TimeUnit
 
-
+// объект EnKodSDK включает основные методы для инициализации и функционирования библиотеки
 object EnKodSDK {
 
     private const val baseUrl = "https://ext.enkod.ru/"
@@ -203,7 +203,7 @@ object EnKodSDK {
 
     }
 
-    // класс NullOnEmptyConverterFactory - предназначен для правильной работы retrofit
+    // класс NullOnEmptyConverterFactory - предназначен для правильной работы Retrofit
 
     class NullOnEmptyConverterFactory : Converter.Factory() {
         override fun responseBodyConverter(
@@ -370,8 +370,7 @@ object EnKodSDK {
         })
     }
 
-    // функция startSession -  активирует сессию
-
+    // функция startSession - активирует сессию
     private fun startSession() {
 
         retrofit.startSession(getSession(), getClientName())
@@ -393,9 +392,8 @@ object EnKodSDK {
 
     }
 
-    // фукция subscribePush создает пустые персоны при наличии канала связи,
-    // реализует возможность добавления мобильного токена к персоне.
-
+    // функция subscribePush создает пустые персоны при наличии канала связи,
+    // реализует возможность добавления мобильного токена к персоне/.
     private fun subscribeToPush(client: String, session: String, token: String) {
 
         retrofit.subscribeToPushToken(
@@ -686,7 +684,7 @@ object EnKodSDK {
     }
 
 
-    // функция logOut - производит очиску всех данных и настроек текущего пользователя.
+    // функция logOut - производит очистку всех данных и настроек текущего пользователя.
     // в случаи повторной активации библиотеки после использовании функции logOut, создается новая сессия.
     fun logOut(context: Context) {
 
@@ -734,7 +732,6 @@ object EnKodSDK {
     }
 
     // функция logInfo - позволяет создавать логи для отладки.
-
     internal fun logInfo(msg: String) {
         Log.d("enkodLibrary", msg)
         Log.i(TAG, msg)
@@ -742,7 +739,6 @@ object EnKodSDK {
 
     // функция creatureInputDataFromMessage - конвертирует  RemoteMessage в Data.
     // данная конвертация предназначена для передачи данных push в класс WorkManager
-
     internal fun creatureInputDataFromMessage(message: RemoteMessage): Data {
 
         val dataBuilder = Data.Builder()
@@ -759,8 +755,7 @@ object EnKodSDK {
         return inputData
     }
 
-    // функция loadImageFromUrl выполнить загрузку изображения из интернета по url с помощью Glide и Rxjava
-
+    // функция loadImageFromUrl позволяет выполнить загрузку изображения из интернета используя url с помощью Glide и Rxjava
     private fun loadImageFromUrl(context: Context, url: String): Single<Bitmap> {
 
         val userAgent = when (val agent: String? = System.getProperty("http.agent")) {

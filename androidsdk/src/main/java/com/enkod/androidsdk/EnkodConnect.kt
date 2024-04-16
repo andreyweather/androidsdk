@@ -18,7 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
  // класс EnkodConnect предназначен для активации библиотеки содержит конструктор,
- // в который входят поля для настройки библиотеки
+ // в который входят поля для настройки библиотеки.
 class EnkodConnect(
 
     _account: String?,

@@ -18,9 +18,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
+
+// объект VerificationOfTokenCompliance предназначен для проверки соответвия значения токена на сервисе с текущем
+// значением токена fcm
 internal object VerificationOfTokenCompliance {
 
-    
     internal fun startVerificationTokenUsingWorkManager (context: Context) {
 
         EnKodSDK.logInfo("start verification function using workManager")
