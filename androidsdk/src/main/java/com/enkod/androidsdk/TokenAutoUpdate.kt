@@ -30,78 +30,12 @@ import java.util.concurrent.TimeUnit
 
 internal object TokenAutoUpdate {
 
-    fun startTokenAutoUpdateUsingWorkManager(context: Context, time: Int) {
-
-        logInfo("token auto update work start")
-
-        val constraint =
-            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-
-        val workRequest =
-
-            PeriodicWorkRequestBuilder<TokenAutoUpdateWorkManager>(
-                time.toLong(),
-                TimeUnit.HOURS
-            )
-                .setInitialDelay(time.toLong(), TimeUnit.HOURS)
-                .setConstraints(constraint)
-                .build()
-
-        WorkManager
-
-            .getInstance(context)
-            .enqueueUniquePeriodicWork(
-                "tokenAutoUpdateWorker",
-                ExistingPeriodicWorkPolicy.UPDATE,
-                workRequest
-            )
-
-    }
-
-    class TokenAutoUpdateWorkManager(
-        context: Context,
-        workerParameters: WorkerParameters
-    ) :
-
-        Worker(context, workerParameters) {
-
-
-        override fun doWork(): Result {
-
-            val preferences = applicationContext.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-
-            val preferencesUsingFcm: Boolean? =
-                preferences.getBoolean(Preferences.USING_FCM, false)
-
-            if (preferencesUsingFcm == true) {
-
-                if (isAppInforegrounded()) {
-
-                    EnKodSDK.startTokenManualUpdateObserver.observable.subscribe { start ->
-                        when (start) {
-                            true -> {
-                                logInfo("auto update canceled manual update activated")
-                                return@subscribe
-                            }
-
-                            false -> tokenUpdate(applicationContext)
-                        }
-                    }
-
-                } else tokenUpdate(applicationContext)
-            }
-            return Result.success()
-        }
-    }
-
-    private fun tokenUpdate(context: Context) {
+    internal fun tokenUpdate(context: Context) {
 
         startTokenAutoUpdateObserver.value = true
 
         initPreferences(context)
         initRetrofit(context)
-
-        logInfo("token auto update function")
 
         val preferences = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
 
@@ -121,7 +55,9 @@ internal object TokenAutoUpdate {
 
             if (timeLastTokenUpdate != null && timeLastTokenUpdate > 0) {
 
-                if ((System.currentTimeMillis() - timeLastTokenUpdate) >= timeAutoUpdate - 60000) {
+                if ((System.currentTimeMillis() - timeLastTokenUpdate) >= timeAutoUpdate) {
+
+                    logInfo("token auto update function")
 
                     updateProcess(context, preferencesAcc)
 

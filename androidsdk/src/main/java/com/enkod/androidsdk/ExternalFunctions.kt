@@ -15,7 +15,7 @@ import com.enkod.androidsdk.Variables.actionButtonText
 import com.enkod.androidsdk.Variables.actionButtonsUrl
 import java.util.*
 
-
+// файл содержащий функции расширения
 internal fun NotificationCompat.Builder.setIcon(context: Context, data: String?): NotificationCompat.Builder {
     fun defaultResID() = context.getResourceFromMeta("com.google.firebase.messaging.default_notification_icon", defaultIconId)
 

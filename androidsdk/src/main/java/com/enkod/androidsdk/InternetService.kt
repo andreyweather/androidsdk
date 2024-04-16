@@ -15,6 +15,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
+// данный класс наследует класс Service()
+// предназначен для предоставления интернет соединения приложению во время получения push уведомлений нормального приоритетата
+// для Build.VERSION.SDK_INT < 31
 class InternetService : Service() {
 
     @RequiresApi(Build.VERSION_CODES.O)

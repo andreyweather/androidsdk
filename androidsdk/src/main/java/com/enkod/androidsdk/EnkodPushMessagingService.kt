@@ -14,7 +14,9 @@ import com.enkod.androidsdk.EnKodSDK.isAppInforegrounded
 import com.enkod.androidsdk.EnKodSDK.logInfo
 import com.enkod.androidsdk.EnKodSDK.managingTheNotificationCreationProcess
 import com.enkod.androidsdk.Preferences.MESSAGEID_TAG
+import com.enkod.androidsdk.Preferences.START_AUTO_UPDATE_TAG
 import com.enkod.androidsdk.Preferences.TAG
+import com.enkod.androidsdk.Preferences.USING_FCM
 import com.enkod.androidsdk.Variables.messageId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -42,8 +44,12 @@ class EnkodPushMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         val preferences = applicationContext.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+
         val preferencesUsingFcm: Boolean? =
-            preferences.getBoolean(Preferences.USING_FCM, false)
+            preferences.getBoolean(USING_FCM, false)
+
+        val preferencesTokenAutoUpdate: Boolean? =
+        preferences.getBoolean (START_AUTO_UPDATE_TAG, false)
 
         if (preferencesUsingFcm == true) {
 
@@ -93,10 +99,18 @@ class EnkodPushMessagingService : FirebaseMessagingService() {
             fun choosingNotificationProcessTopApi () {
                 when (message.priority) {
 
-                    1 -> managingTheNotificationCreationProcess(
+                    1 -> {
+
+                        managingTheNotificationCreationProcess(
                         applicationContext,
-                        dataFromPush
-                    )
+                        dataFromPush )
+
+                        if (preferencesTokenAutoUpdate == true) {
+                            TokenAutoUpdate.tokenUpdate(applicationContext)
+                        }
+
+
+                    }
 
                     2 -> showPushWorkManager()
                     else -> showPushWorkManager()
@@ -123,10 +137,17 @@ class EnkodPushMessagingService : FirebaseMessagingService() {
 
                             when (message.priority) {
 
-                                1 -> managingTheNotificationCreationProcess(
-                                    applicationContext,
-                                    dataFromPush
-                                )
+                                1 -> {
+
+                                    managingTheNotificationCreationProcess(
+                                        applicationContext,
+                                        dataFromPush )
+
+                                    if (preferencesTokenAutoUpdate == true) {
+                                        TokenAutoUpdate.tokenUpdate(applicationContext)
+                                    }
+
+                                }
 
                                 2 -> {
 
